@@ -3,10 +3,10 @@ from pathlib import Path
 from huggingface_hub import list_repo_files, get_token
 
 
-repo_id = "nvidia/Nemotron-CC-v2"
+repo_id = "nvidia/Nemotron-CC-v2.1"
 repo_type = "dataset"
 revision = "main"
-output_dir = "/leonardo_work/AIFAC_L01_028/datasets/Nemotron-CC-v2" # put your output directory here
+output_dir = "/leonardo_work/AIFAC_L01_028/datasets/Nemotron-CC-v2.1" # put your output directory here
 ssh_username = os.getenv("USER") # automatically get current username
 
 # Ensure output directory exists

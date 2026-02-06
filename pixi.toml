@@ -1,7 +1,7 @@
 [workspace]
 authors = ["maxidl <maximilian@ellmind.com>"]
 channels = ["conda-forge"]
-name = "leo_hf_downloader"
+name = "eurohpc-data-transfer"
 platforms = ["linux-64"]
 version = "0.1.0"
 
@@ -16,3 +16,4 @@ pyarrow = ">=22.0.0, <23"
 zstandard = ">=0.25.0, <0.26"
 polars = ">=1.37.1, <2"
 duckdb = ">=1.4.3, <2"
+tqdm = ">=4.67, <5"

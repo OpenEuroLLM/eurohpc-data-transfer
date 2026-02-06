@@ -1,9 +1,18 @@
-# Leonardo Data Transfer Tools
+# Leonardo
 
-Tools for high-speed data transfer using Leonardo's datamover nodes with rclone.
+Data transfer tools for Leonardo's datamover nodes using rclone.
+
+| Direction  | Method                | Tool / Config          | Description                                              |
+|------------|-----------------------|------------------------|----------------------------------------------------------|
+| Download   | HTTP URL list         | rclone + file list     | Download files from any HTTP source using a file list    |
+| Download   | HuggingFace           | `hf_download.py`       | Download a HuggingFace repo via the datamover node       |
+| Download   | LUMI-O (S3)           | rclone + S3 credentials| Download files from LUMI-O object storage via S3         |
+| Upload     | SFTP to remote cluster| `upload.py`            | Upload data from Leonardo to a remote cluster (e.g. BSC) |
 
 
-## Download a list of urls
+## Download
+
+### Downloading a list of HTTP urls
 Create a file with a list of file paths, relative to shared http-url prefix. For example, to grab one file from swedish and finnish HPLT3 each:
 ```
 # /leonardo_work/AIFAC_L01_028/datasets/HPLT3/file_list.txt 
@@ -24,16 +33,16 @@ swe_Latn/
 ```
 
 
-## download.py - Download from HuggingFace
+### Downloading from HuggingFace
 
-Creates a command for downloading a HuggingFace repo via the datamover node.
+`hf_download.py` creates a command for downloading a HuggingFace repo via the datamover node.
 
 ```bash
-python download.py
+python hf_download.py
 # Prints an ssh command to run on a Leonardo login node
 ```
 
-### Example output
+#### Example output
 
 ```bash
 # 2025/07/09 15:02:33 NOTICE: Config file "/home/.rclone.conf" not found - using defaults
@@ -53,13 +62,25 @@ python download.py
 #  *         data/arb_Arab/train/002_00000.parquet: transferring
 ```
 
-The progress indicator is a bit screwed because we do not want to send a head request to hf for every file, so it does not know the file sizes and cannot give you an estimate.
+The progress indicator is a bit screwed because we do not want to send a head request to hf for every file, so rclone does not know the file sizes and cannot give you an estimate.
 
-## upload.py - Upload to remote cluster via SFTP
+### Downloading from LUMI
 
-Creates a command for uploading data from Leonardo to a remote cluster (e.g., BSC) via SFTP.
+Example to download files from LUMI-O via datamover:
+```bash
+export LUMIO_ACCESS_KEY=EQ4...
+export LUMIO_SECRET_KEY=xj2...
+ssh -xt -o PreferredAuthentications=hostbased -o PasswordAuthentication=no -o PubkeyAuthentication=no -o GSSAPIAuthentication=no midahl00@data.leonardo.cineca.it "rclone copy -vv --transfers 16 --checkers 16 --progress --retries 15 --retries-sleep 5s --low-level-retries 15 --size-only --multi-thread-streams 3 --multi-thread-cutoff 200M --buffer-size 128M --timeout 600s --contimeout 60s --no-update-modtime --use-mmap --s3-provider Other --s3-endpoint https://lumidata.eu --s3-env-auth=false --s3-access-key-id ${LUMIO_ACCESS_KEY} --s3-secret-access-key ${LUMIO_SECRET_KEY} --s3-no-check-bucket :s3:462000963:hplt4 /leonardo_work/AIFAC_L01_028/datasets/hplt4"
+```
 
-### Setup
+
+## Upload
+
+### Upload to remote cluster via SFTP
+
+`upload.py` creates a command for uploading data from Leonardo to a remote cluster (e.g., BSC) via SFTP.
+
+#### Setup
 
 1. Ensure you have SSH key-based authentication set up with the remote cluster
 2. Edit `upload.py` to configure:
@@ -68,7 +89,7 @@ Creates a command for uploading data from Leonardo to a remote cluster (e.g., BS
    - `remote_user` - your username on the remote host
    - `remote_dest` - destination path on the remote host
 
-### Usage
+#### Usage
 
 ```bash
 # 1. Add your SSH key to ssh-agent (handles passphrase-protected keys)
@@ -99,7 +120,7 @@ Transferring:
  ...
 ```
 
-### Notes
+#### Notes
 
 - The datamover is containerized, so you'll see harmless errors about config files
 - If the transfer is interrupted, rerun the same command - rclone resumes automatically

@@ -5,10 +5,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 WORKERS = 4
 
-d = Path("/leonardo_work/AIFAC_L01_028/datasets/HPLT3/fin_Latn")
+d = Path("/leonardo_work/AIFAC_L01_028/datasets/HPLT3/deu_Latn")
 
 files = list(d.glob("**/*.jsonl.zst"))
 output_files = [Path(str(f).replace(".jsonl.zst", ".zstd.parquet").replace("HPLT3", "HPLT3-parquet")) for f in files]
+
+print(f"d: {d}")
+print(f"files: {len(files)}")
+print(f"output directory: {output_files[0].parent}")
 
 KEEP_COLUMNS = ["id", "text"]
 
@@ -17,7 +21,7 @@ def convert_file(file_pair):
     file, output_file = file_pair
     try:
         if output_file.exists():
-            return f"Skipping {file.name} because it already exists"
+            return f"Skipping {file.name} because output file {output_file} it already exists"
         
         output_file.parent.mkdir(exist_ok=True, parents=True)
         tmp_file = output_file.with_suffix(".tmp")

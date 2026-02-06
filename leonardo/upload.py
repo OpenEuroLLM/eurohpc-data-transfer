@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 
 # Configuration - modify these as needed
-source_dir = "/leonardo_work/AIFAC_L01_028/datasets/HPLT3"  # absolute path on Leonardo
+source_dir = "/leonardo_work/AIFAC_L01_028/datasets/finepdfs-synt/data/eng_Latn/train-984-shards"  # absolute path on Leonardo
 remote_host = "transfer3.bsc.es"  # remote SFTP host
 remote_user = "ella189763"  # your username on the remote host
-remote_dest = "/gpfs/scratch/ehpc532/HPLT3"  # destination path on remote host
+remote_dest = "/gpfs/scratch/ehpc532/datasets/finepdfs/data/eng_Latn/train-984-shards"  # destination path on remote host
 
 ssh_username = os.getenv("USER")  # automatically get current username
 
