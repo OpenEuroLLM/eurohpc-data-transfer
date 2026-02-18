@@ -3,12 +3,12 @@ import duckdb
 from tqdm.auto import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-WORKERS = 4
+WORKERS = 1
 
-d = Path("/leonardo_work/AIFAC_L01_028/datasets/HPLT3/deu_Latn")
+d = Path("/leonardo_work/AIFAC_L01_028/datasets/hplt4/global-dedup/ita_Latn")
 
 files = list(d.glob("**/*.jsonl.zst"))
-output_files = [Path(str(f).replace(".jsonl.zst", ".zstd.parquet").replace("HPLT3", "HPLT3-parquet")) for f in files]
+output_files = [Path(str(f).replace(".jsonl.zst", ".zstd.parquet").replace("hplt4", "hplt4-parquet")) for f in files]
 
 print(f"d: {d}")
 print(f"files: {len(files)}")
@@ -28,7 +28,7 @@ def convert_file(file_pair):
         
         # Use a fresh connection per thread with streaming settings
         con = duckdb.connect()
-        con.execute("SET memory_limit = '470GB'")
+        con.execute("SET memory_limit = '16GB'")
         con.execute("SET preserve_insertion_order = false")  # Enable parallel/streaming
         con.execute("SET temp_directory = '/leonardo_scratch/large/userexternal/midahl00/duckdb_temp'")  # Allow spilling to disk
         
@@ -39,7 +39,8 @@ def convert_file(file_pair):
                 FROM read_json(
                     '{file}',
                     format = 'newline_delimited',
-                    columns = {{id: 'VARCHAR', text: 'VARCHAR'}}
+                    columns = {{id: 'VARCHAR', text: 'VARCHAR'}},
+                    maximum_object_size = 50000000
                 )
             )
             TO '{tmp_file}' (FORMAT PARQUET, COMPRESSION ZSTD)

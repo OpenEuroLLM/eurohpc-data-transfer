@@ -11,7 +11,7 @@ version = "0.1.0"
 python = "3.12.*"
 
 [pypi-dependencies]
-huggingface-hub = ">=0.33.2, <0.34"
+huggingface-hub = ">=1.4.1, <2"
 pyarrow = ">=22.0.0, <23"
 zstandard = ">=0.25.0, <0.26"
 polars = ">=1.37.1, <2"
