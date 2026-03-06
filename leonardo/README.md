@@ -75,8 +75,7 @@ ssh -xt -o PreferredAuthentications=hostbased -o PasswordAuthentication=no -o Pu
 
 Example to download files from LUMI via datamover:
 ```bash
-ssh -Axt -o PreferredAuthentications=hostbased -o PasswordAuthentication=no -o PubkeyAuthentication=no -o GSSAPIAuthentication=no midahl00@data.leonardo.cineca.it 'rclone copy -vv :sftp,host=lumi.csc.fi,user=maxiidah:/scratch/project_462000963/datasets/hplt/4.0/global-dedup/por_Latn /leonardo_work/AIFAC_L01_028/datasets/hplt4/global-dedup/por_Latn --sftp-key-use-agent --sftp-concurrency 16 --sftp-disable-hashcheck --sftp-set-modtime=false --progress --transfers 32 --checkers 32 --buffer-size 256M --retries 15 --retries-sleep 5s --low-level-retries 15 --size-only --timeout 600s --contimeout
-60s --use-mmap --no-update-modtime'
+ssh -Axt -o PreferredAuthentications=hostbased -o PasswordAuthentication=no -o PubkeyAuthentication=no -o GSSAPIAuthentication=no midahl00@data.leonardo.cineca.it 'rclone copy -vv :sftp,host=lumi.csc.fi,user=maxiidah:/scratch/project_462000963/datasets/hplt/4.0/global-dedup/por_Latn /leonardo_work/AIFAC_L01_028/datasets/hplt4/global-dedup/por_Latn --sftp-key-use-agent --sftp-concurrency 16 --sftp-disable-hashcheck --sftp-set-modtime=false --progress --transfers 32 --checkers 32 --buffer-size 256M --retries 15 --retries-sleep 5s --low-level-retries 15 --size-only --timeout 600s --contimeout 60s --use-mmap --no-update-modtime'
 ```
 
 
